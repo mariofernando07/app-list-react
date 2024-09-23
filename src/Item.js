@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./Item.css";
-function Item({ name, index, setItems }) {
+import { ListContext } from "./App";
+function Item({ name, index }) {
+  const [dispatchList] = useContext(ListContext);
   const [modifyOn, setModifyOn] = useState(false);
   const [text, setText] = useState(name);
   const inputRef = useRef();
@@ -9,17 +11,19 @@ function Item({ name, index, setItems }) {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [inputRef.current]);
+  }, [modifyOn]);
 
   function onInputChange(event) {
-    setText(event.target.value.trim());
+    setText(event.target.value);
   }
 
   function onInputBlur(event) {
-    setItems((items) => items.map(item => {
-      if(index === item.key) item.name = event.target.value;
-      return item
-    }));
+    dispatchList({
+      type: 'UPDATE', payload: {
+        key: index,
+        name: event.target.value.trim()
+      }
+    })
     modify();
   }
 
@@ -28,7 +32,7 @@ function Item({ name, index, setItems }) {
   }
 
   function remove() {
-    setItems((items) => items.filter((item) => item.key !== index));
+    dispatchList({ type: 'REMOVE', key: index })
   }
 
   return (

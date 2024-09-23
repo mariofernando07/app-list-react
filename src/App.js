@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect } from "react";
 import "./App.css";
 import Items from "./Items";
+import useList from "./UseList";
+const ListContext = createContext()
 
 function App() {
-  const [items, setItems] = useState([]);
-  const [key, setKey] = useState(1);
+  const [items, listDispatch] = useList([])
 
   useEffect(() => {
     console.log(items)
   }, [items])
 
   function addItem() {
-    const name = `Item ${key}`;
-    setKey(key + 1);
-    setItems((value) => [...value, { name, key }]);
+    listDispatch({ type: 'ADD'})
   }
 
   return (
     <>
       <button onClick={addItem}>Add item</button>
-      <Items items={items} setItems={setItems} />
+      <ListContext.Provider value={[ listDispatch ]}>
+        <Items items={items} />
+      </ListContext.Provider>
     </>
   );
 }
 
-export default App;
+export { App, ListContext };
