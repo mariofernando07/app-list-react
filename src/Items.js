@@ -1,11 +1,11 @@
 import Item from './Item'
 import './Items.css';
-function Items({ items, setItems }) {
+function Items({ items }) {
 
   return (
     <ul>
       {items.map(({key, name}) => (
-        <Item key={key} name={name} index={key} setItems={setItems}/>
+        <Item key={key} name={name} index={key}/>
       ))}
     </ul>
   )
