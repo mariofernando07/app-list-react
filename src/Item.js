@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Item.css";
-function Item({ name, setItems, index }) {
+function Item({ name, index, setItems }) {
   const [modifyOn, setModifyOn] = useState(false);
   const [text, setText] = useState(name);
   const inputRef = useRef();
@@ -16,12 +16,10 @@ function Item({ name, setItems, index }) {
   }
 
   function onInputBlur(event) {
-    setItems((items) => {
-      if(text.length) {
-        items[index] = event.target.value;
-      }
-      return [...items];
-    });
+    setItems((items) => items.map(item => {
+      if(index === item.key) item.name = event.target.value;
+      return item
+    }));
     modify();
   }
 
@@ -30,7 +28,7 @@ function Item({ name, setItems, index }) {
   }
 
   function remove() {
-    setItems((items) => items.filter((_item, i) => i !== index));
+    setItems((items) => items.filter((item) => item.key !== index));
   }
 
   return (

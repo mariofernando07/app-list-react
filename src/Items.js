@@ -4,8 +4,8 @@ function Items({ items, setItems }) {
 
   return (
     <ul>
-      {items.map((item, index) => (
-        <Item key={index} name={item} index={index} setItems={setItems}/>
+      {items.map(({key, name}) => (
+        <Item key={key} name={name} index={key} setItems={setItems}/>
       ))}
     </ul>
   )
